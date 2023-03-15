@@ -4,7 +4,7 @@ const app=express();
 app.use(bodyparser.urlencoded({extended:true}))
 app.set('view engine','ejs')
 app.use(express.static('public'))
-
+var prvday="";
 var itemlist=[]
 app.get("/",function(req,res){
     var day=new Date();
@@ -15,11 +15,17 @@ app.get("/",function(req,res){
         month:"long",
     }
     day=day.toLocaleDateString('en-US',object)
+    if(prvday!=day){
+        itemlist=[];
+        prvday=day;
+    }
     res.render('list',{currentday:day,item:itemlist})
 });
 app.post("/",function(req,res){
     var item=req.body.itemname;
+    if(item!=""){
     itemlist.push(item);
+    }
     res.redirect("/");
 });
 
